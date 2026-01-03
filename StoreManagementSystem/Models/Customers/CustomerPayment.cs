@@ -1,4 +1,7 @@
-﻿namespace StoreManagementSystem.Models.Customers
+﻿using StoreManagementSystem.Models.Orders;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace StoreManagementSystem.Models.Customers
 {
     public class CustomerPayment
     {
@@ -7,5 +10,16 @@
         public DateTime Date { get; set; }
         public string Note { get; set; } = null!;
         public decimal BalanceAfter { get; set; }
+
+
+        [ForeignKey("Customer")]
+        public Guid CustomerId { get; set; }
+        public Customer Customer { get; set; } = null!;
+
+
+        [ForeignKey("Order")]
+        public Guid? OrderId { get; set; }
+        public Order? Order { get; set; }
+
     }
 }

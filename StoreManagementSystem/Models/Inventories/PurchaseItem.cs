@@ -1,20 +1,18 @@
-﻿
-namespace StoreManagementSystem.Models.Orders
+﻿namespace StoreManagementSystem.Models.Inventories
 {
-    public class OrderItem
+    public class PurchaseItem
     {
         public Guid Id { get; set; }
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
 
-        [ForeignKey("Order")]
-        public Guid OrderId { get; set; }
-        public Order Order { get; set; } = null!;
+        [ForeignKey("Purchase")]
+        public Guid PurchaseId { get; set; }
+        public Purchase Purchase { get; set; } = null!;
 
 
         [ForeignKey("Product")]
         public int ProductId { get; set; }
         public Product Product { get; set; } = null!;
-        
     }
 }
