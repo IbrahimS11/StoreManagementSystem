@@ -2,7 +2,8 @@
 {
     public class ProductUnitPrice
     {
-        public int UnitPrice { get; set; }
-        ICollection<Product> Products { get; set; } = new List<Product>();
+        public int Id { get; set; }
+        public decimal UnitPrice { get; set; }
+        public ICollection<Product> Products { get; set; } = new List<Product>();
     }
 }

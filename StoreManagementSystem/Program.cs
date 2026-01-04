@@ -1,4 +1,7 @@
 
+using Microsoft.EntityFrameworkCore;
+using StoreManagementSystem.Data;
+
 namespace StoreManagementSystem
 {
     public class Program
@@ -12,6 +15,11 @@ namespace StoreManagementSystem
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+
+            builder.Services.AddDbContext<AppDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("CS"));
+            });
 
             var app = builder.Build();
 

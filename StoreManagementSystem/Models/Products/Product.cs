@@ -11,7 +11,8 @@ namespace StoreManagementSystem.Models.Products
 
 
         [ForeignKey("ProductUnitPrice")]
-        public int UnitPrice { get; set; }
+        public int ProductUnitPriceId { get; set; }
+        public ProductUnitPrice ProductUnitPrice { get; set; } = null!;
 
 
         [ForeignKey("Category")]
