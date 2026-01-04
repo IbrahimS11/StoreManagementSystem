@@ -10,7 +10,6 @@ namespace StoreManagementSystem.Models.Customers
         public string Phone { get; set; } = null!;
 
 
-        [ForeignKey("Address")]
         public int AddressId { get; set; }
         public CustomerAddress Address { get; set; } = null!;
 

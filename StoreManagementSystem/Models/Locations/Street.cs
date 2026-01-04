@@ -8,7 +8,6 @@ namespace StoreManagementSystem.Models.Locations
         public string Name { get; set; } = null!;
 
 
-        [ForeignKey("City")]
         public int CityId { get; set; }
         public City City { get; set; } = null!;
     }

@@ -12,12 +12,12 @@ namespace StoreManagementSystem.Models.Customers
         public decimal BalanceAfter { get; set; }
 
 
-        [ForeignKey("Customer")]
+
         public Guid CustomerId { get; set; }
         public Customer Customer { get; set; } = null!;
 
 
-        [ForeignKey("Order")]
+
         public Guid? OrderId { get; set; }
         public Order? Order { get; set; }
 

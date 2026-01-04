@@ -9,12 +9,12 @@
         public string? Note { get; set; } = null!;
 
 
-        [ForeignKey("Supplier")]
+
         public Guid SupplierId { get; set; }
         public Supplier Supplier { get; set; } = null!;
 
 
-        [ForeignKey("SupplierPayment")]
+
         public Guid SupplierPaymentId { get; set; }
         public SupplierPayment SupplierPayment { get; set; } = null!;
 

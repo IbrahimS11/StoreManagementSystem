@@ -10,17 +10,17 @@ namespace StoreManagementSystem.Models.Products
         public string ImageUrl { get; set; } = null!;
 
 
-        [ForeignKey("ProductUnitPrice")]
+
         public int ProductUnitPriceId { get; set; }
         public ProductUnitPrice ProductUnitPrice { get; set; } = null!;
 
 
-        [ForeignKey("Category")]
+
         public int CategoryId { get; set; }
         public Category Category { get; set; } = null!;
 
 
-        [ForeignKey("ProductFlavor")]
+
         public int ProductFlavorId { get; set; }
         public ProductFlavor ProductFlavor { get; set; } = null!;
 

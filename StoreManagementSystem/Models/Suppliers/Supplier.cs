@@ -9,7 +9,7 @@ namespace StoreManagementSystem.Models.Suppliers
         public string Phone { get; set; } = null!;
 
 
-        [ForeignKey("Address")]
+
         public int AddressId { get; set; }
         public SupplierAddress Address { get; set; } = null!;
 

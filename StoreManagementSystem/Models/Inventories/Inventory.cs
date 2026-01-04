@@ -8,12 +8,12 @@
 
 
 
-        [ForeignKey("PurchaseItem")]
+
         public Guid PurchaseItemId { get; set; }
         public PurchaseItem PurchaseItem { get; set; } = null!;
 
 
-        [ForeignKey("Product")]
+
         public int ProductId { get; set; }
         public Product Product { get; set; } = null!;
 

@@ -11,12 +11,12 @@ namespace StoreManagementSystem.Models.Suppliers
         public decimal BalanceAfter { get; set; }
 
 
-        [ForeignKey("Supplier")]
+
         public Guid SupplierId { get; set; }
         public Supplier Supplier { get; set; } = null!;
 
 
-        [ForeignKey("Purchase")]
+
         public Guid? PurchaseId { get; set; }
         public Purchase? Purchase { get; set; }
     }
