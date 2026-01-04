@@ -10,7 +10,7 @@ namespace StoreManagementSystem.Models.Suppliers
 
 
 
-        public int AddressId { get; set; }
+        public Guid AddressId { get; set; }
         public SupplierAddress Address { get; set; } = null!;
 
         public ICollection<SupplierPayment> Payments { get; set; } = new List<SupplierPayment>();
