@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using StoreManagementSystem.Identity;
 
 namespace StoreManagementSystem.Data
 {
-    public class AppDbContext: DbContext
+    public class AppDbContext: IdentityDbContext<AppIdentityUser>
     {
         //Customers
         public DbSet<Customer> Customers { get; set; }
