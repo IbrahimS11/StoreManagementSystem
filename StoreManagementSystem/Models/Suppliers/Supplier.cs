@@ -1,4 +1,5 @@
 ﻿using StoreManagementSystem.Models.Inventories;
+using StoreManagementSystem.Identity;
 
 namespace StoreManagementSystem.Models.Suppliers
 {
@@ -15,5 +16,9 @@ namespace StoreManagementSystem.Models.Suppliers
 
         public ICollection<SupplierPayment> Payments { get; set; } = new List<SupplierPayment>();
         public ICollection<Purchase> Purchases { get; set; } = new List<Purchase>();
+
+
+        public AppIdentityUser? AppIdentityUser { get; set; }
+
     }
 }

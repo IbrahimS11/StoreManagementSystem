@@ -1,4 +1,5 @@
-﻿using StoreManagementSystem.Models.Orders;
+﻿using StoreManagementSystem.Identity;
+using StoreManagementSystem.Models.Orders;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StoreManagementSystem.Models.Customers
@@ -16,6 +17,9 @@ namespace StoreManagementSystem.Models.Customers
         
         public ICollection<CustomerPayment> Payments { get; set; } = new List<CustomerPayment>();
         public ICollection<Order> Orders { get; set; } = new List<Order>();
+
+
+        public AppIdentityUser? AppIdentityUser { get; set; }
 
     }
 }
