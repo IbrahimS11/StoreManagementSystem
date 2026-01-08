@@ -2,34 +2,24 @@
 using StoreManagementSystem.Repositories.Interfaces.Products;
 namespace StoreManagementSystem.Repositories.Implementations.Products
 {
-    public class ProductRepository : IProductRepository
+    public class ProductRepository : CrudRepository<Product, int>, IProductRepository
     {
-        private readonly AppDbContext context;
-
-        public ProductRepository(AppDbContext _context)
+        private readonly DbSet<Product> dbSet;
+        public ProductRepository(AppDbContext _context):base(_context)
         {
-            context = _context;
+            this.dbSet = _context.Set<Product>();
         }
-        public async Task<IEnumerable<Product>> GetRangeAsync(int skip, int take)
+        
+        public async Task<bool> IsExistAsync(int CategoryId,int ProductUnitPriceId,int ProductFlavorId , int ? ProductId)
         {
-            return await context.Products.OrderBy(x=>x.Id).Skip(skip).Take(take).ToListAsync();
-        }
-        public async Task AddAsync(Product product)
-        {
-            await context.Products.AddAsync(product);
+            return await dbSet.AnyAsync(p => p.CategoryId == CategoryId && p.ProductUnitPriceId == ProductUnitPriceId && p.ProductFlavorId == ProductFlavorId && p.Id !=ProductId);
         }
 
-        public async Task DeleteByIdAsync(int id)
+        public async Task<Product?> GetDetails(int id)
         {
-            await context.Products.Where(p => p.Id == id).ExecuteDeleteAsync();
+            return await dbSet.Where(p => p.Id == id).Include(p=>p.Category).Include(p=>p.ProductUnitPrice).Include(p=>p.ProductFlavor).FirstOrDefaultAsync();
         }
-
-        public Task<Product?> GetByIdAsync(int id)
-        {
-            return context.Products.FirstOrDefaultAsync(p => p.Id == id);
-        }
-
-
+       
     }
 }
 

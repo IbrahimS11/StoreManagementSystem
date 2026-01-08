@@ -1,6 +1,14 @@
-
+using Swashbuckle.AspNetCore;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using StoreManagementSystem.Data;
+using StoreManagementSystem.Repositories.Implementations.Products;
+using StoreManagementSystem.Repositories.Implementations.UnitOfWork;
+using StoreManagementSystem.Repositories.Interfaces;
+using StoreManagementSystem.Repositories.Interfaces.Products;
+using StoreManagementSystem.Repositories.Interfaces.UnitOfWork;
+using StoreManagementSystem.Services.Implementation.Products;
+using StoreManagementSystem.Services.Interfaces.Products;
 
 namespace StoreManagementSystem
 {
@@ -14,7 +22,19 @@ namespace StoreManagementSystem
 
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-            builder.Services.AddOpenApi();
+
+            //builder.Services.AddOpenApi();
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            //register Repositores
+            builder.Services.AddScoped<IProductRepository,ProductRepository>();
+            builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
+            builder.Services.AddScoped( typeof(ICrudRepository<,>), typeof(CrudRepository<,>) );
+
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             builder.Services.AddDbContext<AppDbContext>(options =>
             {
@@ -26,7 +46,9 @@ namespace StoreManagementSystem
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.MapOpenApi();
+                app.UseSwagger();
+                app.UseSwaggerUI();
+             
             }
 
             app.UseHttpsRedirection();

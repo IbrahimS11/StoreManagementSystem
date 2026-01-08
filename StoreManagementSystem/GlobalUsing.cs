@@ -5,5 +5,6 @@ global using StoreManagementSystem.Models.Locations;
 global using StoreManagementSystem.Models.Products;
 global using StoreManagementSystem.Models.Suppliers;
 global using StoreManagementSystem.Models.Inventories;
+global using StoreManagementSystem.Data; 
 
 
