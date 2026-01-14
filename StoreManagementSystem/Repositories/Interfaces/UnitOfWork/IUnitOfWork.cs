@@ -2,6 +2,10 @@
 {
     public interface IUnitOfWork : IDisposable
     {
-        public Task<int> SaveChangesAsync();
+        Task<int> SaveChangesAsync();
+
+        Task BeginTransactionAsync();
+        Task CommitAsync();
+        Task RollbackAsync();
     }
 }
