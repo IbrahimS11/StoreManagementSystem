@@ -35,6 +35,18 @@
             Errors.Add(new Dictionary<string, string> { [key] = error });
         }
 
+        public object Result()
+        {
+            if (IsSuccess == true)
+            {
+                return new { IsSuccess, Data };
+            }
+            else
+            {
+                return new { IsSuccess, Errors };
+            }
+        }
+
            
 
     }
