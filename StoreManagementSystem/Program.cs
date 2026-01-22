@@ -5,14 +5,20 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using StoreManagementSystem.Data;
 using StoreManagementSystem.Identity;
+using StoreManagementSystem.Repositories.Implementations.Inventories;
 using StoreManagementSystem.Repositories.Implementations.Products;
+using StoreManagementSystem.Repositories.Implementations.Suppliers;
 using StoreManagementSystem.Repositories.Implementations.UnitOfWork;
 using StoreManagementSystem.Repositories.Interfaces;
+using StoreManagementSystem.Repositories.Interfaces.Inventories;
 using StoreManagementSystem.Repositories.Interfaces.Products;
+using StoreManagementSystem.Repositories.Interfaces.Suppliers;
 using StoreManagementSystem.Repositories.Interfaces.UnitOfWork;
 using StoreManagementSystem.Services.Implementation.Account;
+using StoreManagementSystem.Services.Implementation.Inventories;
 using StoreManagementSystem.Services.Implementation.Products;
 using StoreManagementSystem.Services.Interfaces.Account;
+using StoreManagementSystem.Services.Interfaces.Inventories;
 using StoreManagementSystem.Services.Interfaces.Products;
 using Swashbuckle.AspNetCore;
 using System.Text;
@@ -47,16 +53,22 @@ namespace StoreManagementSystem
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             //register Repositores
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IProductRepository,ProductRepository>();
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
             builder.Services.AddScoped( typeof(ICrudRepository<,>), typeof(CrudRepository<,>) );
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
+            builder.Services.AddScoped<IPurchaseService, PurchaseService>();
+            builder.Services.AddScoped<ISupplierPaymentRepository, SupplierPaymentRepository>();
+            builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IProductFlavorService, ProductFlavorService>();
+            builder.Services.AddScoped<IProductUnitPriceService, ProductUnitPriceService>();
 
-
-
-            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            
 
             builder.Services.AddIdentity<AppIdentityUser, IdentityRole>(option =>
             {

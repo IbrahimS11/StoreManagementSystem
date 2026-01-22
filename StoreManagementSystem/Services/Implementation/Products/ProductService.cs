@@ -116,7 +116,7 @@ namespace StoreManagementSystem.Services.Implementation.Products
                 return ResultService.Success(productFromDb.Id);
             }
 
-            logger.LogError("Failed to Update this product : {@Product}", productFromDb);
+            logger.LogError("Failed to Update this product : {productFromDb}", productFromDb);
 
             return ResultService.Failure("", "Failed to Update product");
 
@@ -160,16 +160,19 @@ namespace StoreManagementSystem.Services.Implementation.Products
                 return ResultService.Success(id);
             }
 
-            logger.LogError("Failed to delete this product : {@Product}", product);
+            logger.LogError("Failed to delete this product : {product}", product);
             return ResultService.Failure("ProductId",$"Failed to delete product With Id {id}");
         }
 
+
+
         public async Task<IEnumerable<ProductReadDto>> GetAllAsync()
         {
-            var productsFromDb = await productRepo.GetAllAsync();
-            IEnumerable<ProductReadDto> productReadDtos = mapper.Map<IEnumerable<ProductReadDto>>(productsFromDb);
+            var productReadDtos = await productRepo.GetAllIncludeCategoryUnitPriceFavor();
             return  productReadDtos;
         }
+
+       
 
         
     }

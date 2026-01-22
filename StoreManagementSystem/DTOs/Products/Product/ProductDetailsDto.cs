@@ -12,7 +12,7 @@ namespace StoreManagementSystem.DTOs.Products.Product
             public string? Description { get; set; }
             public string? ImageUrl { get; set; }
 
-            public CatetgoryReadDto Category { get; set; } = null!;
+            public CategoryReadDto Category { get; set; } = null!;
             public ProductFlavorReadDto ProductFlavor { get; set; } = null!;
             public ProductUnitPriceReadDto ProductUnitPrice { get; set; } = null!;
         
