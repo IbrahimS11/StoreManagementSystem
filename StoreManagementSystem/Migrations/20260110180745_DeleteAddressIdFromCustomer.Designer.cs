@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StoreManagementSystem.Data;
 
@@ -11,9 +12,11 @@ using StoreManagementSystem.Data;
 namespace StoreManagementSystem.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260110180745_DeleteAddressIdFromCustomer")]
+    partial class DeleteAddressIdFromCustomer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -310,6 +313,7 @@ namespace StoreManagementSystem.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Note")
+                        .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
@@ -319,6 +323,10 @@ namespace StoreManagementSystem.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("OrderId")
+                        .IsUnique()
+                        .HasFilter("[OrderId] IS NOT NULL");
 
                     b.ToTable("CustomerPayments");
                 });
@@ -357,22 +365,21 @@ namespace StoreManagementSystem.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<decimal>("BalanceAfter")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid>("InitialPaymentId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Note")
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
-
                     b.Property<Guid>("SupplierId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SupplierPaymentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("TotalAmount")
@@ -380,9 +387,6 @@ namespace StoreManagementSystem.Migrations
                         .HasColumnType("decimal(12,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("InitialPaymentId")
-                        .IsUnique();
 
                     b.HasIndex("SupplierId");
 
@@ -462,23 +466,22 @@ namespace StoreManagementSystem.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<decimal>("BalanceAfter")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
+
                     b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CustomerPaymentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("InitialPaymentId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Note")
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
-
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
 
                     b.Property<decimal>("TotalAmount")
                         .HasPrecision(12, 2)
@@ -487,9 +490,6 @@ namespace StoreManagementSystem.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("InitialPaymentId")
-                        .IsUnique();
 
                     b.ToTable("Orders");
                 });
@@ -703,7 +703,12 @@ namespace StoreManagementSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SupplierId");
+                    b.HasIndex("PurchaseId")
+                        .IsUnique()
+                        .HasFilter("[PurchaseId] IS NOT NULL");
+
+                    b.HasIndex("SupplierId")
+                        .IsUnique();
 
                     b.ToTable("SupplierPayments");
                 });
@@ -811,7 +816,14 @@ namespace StoreManagementSystem.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("StoreManagementSystem.Models.Orders.Order", "Order")
+                        .WithOne("CustomerPayment")
+                        .HasForeignKey("StoreManagementSystem.Models.Customers.CustomerPayment", "OrderId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.Navigation("Customer");
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("StoreManagementSystem.Models.Inventories.Inventory", b =>
@@ -835,19 +847,11 @@ namespace StoreManagementSystem.Migrations
 
             modelBuilder.Entity("StoreManagementSystem.Models.Inventories.Purchase", b =>
                 {
-                    b.HasOne("StoreManagementSystem.Models.Suppliers.SupplierPayment", "InitialPayment")
-                        .WithOne("Purchase")
-                        .HasForeignKey("StoreManagementSystem.Models.Inventories.Purchase", "InitialPaymentId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("StoreManagementSystem.Models.Suppliers.Supplier", "Supplier")
                         .WithMany("Purchases")
                         .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
-
-                    b.Navigation("InitialPayment");
 
                     b.Navigation("Supplier");
                 });
@@ -890,14 +894,7 @@ namespace StoreManagementSystem.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("StoreManagementSystem.Models.Customers.CustomerPayment", "InitailPayment")
-                        .WithOne("Order")
-                        .HasForeignKey("StoreManagementSystem.Models.Orders.Order", "InitialPaymentId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
                     b.Navigation("Customer");
-
-                    b.Navigation("InitailPayment");
                 });
 
             modelBuilder.Entity("StoreManagementSystem.Models.Orders.OrderItem", b =>
@@ -978,11 +975,18 @@ namespace StoreManagementSystem.Migrations
 
             modelBuilder.Entity("StoreManagementSystem.Models.Suppliers.SupplierPayment", b =>
                 {
+                    b.HasOne("StoreManagementSystem.Models.Inventories.Purchase", "Purchase")
+                        .WithOne("SupplierPayment")
+                        .HasForeignKey("StoreManagementSystem.Models.Suppliers.SupplierPayment", "PurchaseId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.HasOne("StoreManagementSystem.Models.Suppliers.Supplier", "Supplier")
                         .WithMany("Payments")
                         .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("Purchase");
 
                     b.Navigation("Supplier");
                 });
@@ -999,14 +1003,12 @@ namespace StoreManagementSystem.Migrations
                     b.Navigation("Payments");
                 });
 
-            modelBuilder.Entity("StoreManagementSystem.Models.Customers.CustomerPayment", b =>
-                {
-                    b.Navigation("Order");
-                });
-
             modelBuilder.Entity("StoreManagementSystem.Models.Inventories.Purchase", b =>
                 {
                     b.Navigation("PurchaseItems");
+
+                    b.Navigation("SupplierPayment")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("StoreManagementSystem.Models.Inventories.PurchaseItem", b =>
@@ -1016,6 +1018,9 @@ namespace StoreManagementSystem.Migrations
 
             modelBuilder.Entity("StoreManagementSystem.Models.Orders.Order", b =>
                 {
+                    b.Navigation("CustomerPayment")
+                        .IsRequired();
+
                     b.Navigation("OrderItems");
                 });
 
@@ -1054,11 +1059,6 @@ namespace StoreManagementSystem.Migrations
                 {
                     b.Navigation("Supplier")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("StoreManagementSystem.Models.Suppliers.SupplierPayment", b =>
-                {
-                    b.Navigation("Purchase");
                 });
 #pragma warning restore 612, 618
         }
