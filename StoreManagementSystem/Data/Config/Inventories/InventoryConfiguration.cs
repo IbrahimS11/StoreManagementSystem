@@ -12,8 +12,6 @@ public class InventoryConfiguration : IEntityTypeConfiguration<Inventory>
         builder.Property(i => i.Quantity)
                .IsRequired();
 
-        builder.Property(i => i.ExpiryDate)
-               .IsRequired();
 
         builder.HasOne(i => i.PurchaseItem)
                .WithOne(pi => pi.Inventory)

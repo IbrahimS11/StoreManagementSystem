@@ -12,9 +12,8 @@ namespace StoreManagementSystem.Data.Config.Inventories
                    .HasPrecision(12, 2)
                    .IsRequired();
 
-            builder.Property(p => p.BalanceAfter)
-                   .HasPrecision(12, 2)
-                   .IsRequired();
+            builder.Property(p => p.Status)
+                    .HasDefaultValue(PurchaseStatus.Pending);
 
             builder.Property(p => p.Note)
                    .HasMaxLength(150)
@@ -25,9 +24,9 @@ namespace StoreManagementSystem.Data.Config.Inventories
                    .HasForeignKey(p => p.SupplierId)
                    .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasOne(p => p.SupplierPayment)
+            builder.HasOne(p => p.InitialPayment)
                    .WithOne(sp => sp.Purchase)
-                   .HasForeignKey<SupplierPayment>(sp => sp.PurchaseId)
+                   .HasForeignKey<Purchase>(p=>p.InitialPaymentId)
                    .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasMany(p => p.PurchaseItems)
