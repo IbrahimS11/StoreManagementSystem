@@ -5,6 +5,7 @@
         Task<IEnumerable<TEntity>> GetRangeAsync(int skip,int take);
         Task<IEnumerable<TEntity>> GetAllAsync();
         Task<TEntity?> GetByIdAsync(TKey id);
+        Task<TEntity?> FindAsync(TKey id);
         void Add(TEntity entity);
         Task DeleteByIdAsync(TKey id);
         void Delete(TEntity entity);
