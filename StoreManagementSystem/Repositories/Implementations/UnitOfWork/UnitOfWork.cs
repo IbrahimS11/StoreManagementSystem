@@ -23,7 +23,6 @@ namespace StoreManagementSystem.Repositories.Implementations.UnitOfWork
             if (transaction == null)
                 throw new InvalidOperationException("No active transaction");
 
-            await context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
 
