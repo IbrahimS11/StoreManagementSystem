@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using StoreManagementSystem.Data;
+using StoreManagementSystem.Filters;
 using StoreManagementSystem.Identity;
 using StoreManagementSystem.Repositories.Implementations.Inventories;
 using StoreManagementSystem.Repositories.Implementations.Products;
@@ -45,6 +46,15 @@ namespace StoreManagementSystem
             // Add services to the container.
 
             builder.Services.AddControllers();
+
+            builder.Services.AddScoped<HandleErrorFilter>();
+
+            builder.Services.AddControllers(options =>
+            {
+                options.Filters.Add<HandleErrorFilter>();
+            });
+
+
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 
             //builder.Services.AddOpenApi();
