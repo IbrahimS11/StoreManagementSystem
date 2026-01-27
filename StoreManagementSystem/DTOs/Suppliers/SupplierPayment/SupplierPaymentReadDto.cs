@@ -1,8 +1,6 @@
-﻿using StoreManagementSystem.Models.Inventories;
-
-namespace StoreManagementSystem.Models.Suppliers
+﻿namespace StoreManagementSystem.DTOs.Suppliers.SupplierPayment
 {
-    public class SupplierPayment
+    public class SupplierPaymentReadDto
     {
         public Guid Id { get; set; }
         public decimal Amount { get; set; }
@@ -10,14 +8,8 @@ namespace StoreManagementSystem.Models.Suppliers
         public string? Note { get; set; } = null!;
         public decimal BalanceAfter { get; set; }
 
-
-
         public Guid SupplierId { get; set; }
-        public Supplier Supplier { get; set; } = null!;
-
-
 
         public Guid? PurchaseId { get; set; }
-        public Purchase? Purchase { get; set; }
     }
 }

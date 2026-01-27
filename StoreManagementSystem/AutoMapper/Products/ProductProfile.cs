@@ -14,7 +14,7 @@ namespace StoreManagementSystem.AutoMapper.Products
             CreateMap<ProductUpdateDto, Product>();
             CreateMap<Product, ProductDetailsDto>();
             CreateMap<Product, ProductReadDto>();
-            CreateMap<Category, CatetgoryReadDto>();
+            CreateMap<Category, CategoryReadDto>();
             CreateMap<ProductFlavor, ProductFlavorReadDto>();
             CreateMap<ProductUnitPrice, ProductUnitPriceReadDto>();
         }

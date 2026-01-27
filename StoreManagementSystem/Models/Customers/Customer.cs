@@ -11,7 +11,6 @@ namespace StoreManagementSystem.Models.Customers
         public string Phone { get; set; } = null!;
 
 
-        public int AddressId { get; set; }
         public CustomerAddress Address { get; set; } = null!;
 
         

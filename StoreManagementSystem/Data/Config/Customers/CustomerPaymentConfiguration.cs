@@ -23,11 +23,9 @@ namespace StoreManagementSystem.Data.Config.Customers
 
             builder.Property(cp => cp.Note)
                    .HasMaxLength(150)
-                   .IsRequired();
+                   .IsRequired(false);
 
-            
 
-            builder.HasIndex(cp => cp.OrderId).IsUnique();
 
         }
     }

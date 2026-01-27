@@ -16,22 +16,22 @@ namespace StoreManagementSystem.Data.Config.Orders
                    .HasPrecision(12, 2)
                    .IsRequired();
 
-            builder.Property(o => o.BalanceAfter)
-                   .HasPrecision(12, 2)
-                   .IsRequired();
 
             builder.Property(o => o.Note)
                    .HasMaxLength(150)
                    .IsRequired(false);
+
+            builder.Property(o => o.Status)
+                   .HasDefaultValue(OrderStatus.Pending);
 
             builder.HasOne(o => o.Customer)
                    .WithMany(c => c.Orders)
                    .HasForeignKey(o => o.CustomerId)
                    .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasOne(o => o.CustomerPayment)
+            builder.HasOne(o => o.InitailPayment)
                    .WithOne(cp => cp.Order)
-                   .HasForeignKey<CustomerPayment>(cp => cp.OrderId)
+                   .HasForeignKey<Order>(cp => cp.InitialPaymentId)
                    .IsRequired(false)
                    .OnDelete(DeleteBehavior.NoAction);
 

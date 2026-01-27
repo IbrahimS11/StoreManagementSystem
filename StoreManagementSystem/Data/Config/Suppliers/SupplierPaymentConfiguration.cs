@@ -26,7 +26,7 @@ namespace StoreManagementSystem.Data.Config.Suppliers
                    .IsRequired(false);
 
 
-            builder.HasIndex(cp => cp.SupplierId).IsUnique();
+
 
         }
     }
