@@ -8,6 +8,7 @@ using StoreManagementSystem.Services.Interfaces.Products;
 namespace StoreManagementSystem.Controllers.Products
 {
     [ApiController]
+    [Authorize(Roles ="admin")]
     [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {
@@ -54,9 +55,9 @@ namespace StoreManagementSystem.Controllers.Products
             ResultService result = await productService.CreateAsync(model);
             if (result.IsSuccess)
             {
-                return Ok(new { result.IsSuccess, id = result.Data });
+                return Ok(result.Result());
             }
-            return BadRequest(new { result.IsSuccess, errors = result.Errors });
+            return BadRequest(result.Result());
         }
 
         [Authorize(Roles ="admin")]
@@ -66,9 +67,9 @@ namespace StoreManagementSystem.Controllers.Products
             ResultService result = await productService.UpdateAsync(model);
             if (result.IsSuccess)
             {
-                return Ok(new { result.IsSuccess, id = result.Data });
+                return Ok(result.Result());
             }
-            return BadRequest(new { result.IsSuccess, errors = result.Errors });
+            return BadRequest(result.Result());
         }
 
 
@@ -79,9 +80,9 @@ namespace StoreManagementSystem.Controllers.Products
             ResultService result = await productService.DeleteByIdAsync(id);
             if (result.IsSuccess)
             {
-                return Ok(new { result.IsSuccess, id = result.Data });
+                return Ok(result.Result());
             }
-            return BadRequest(new { result.IsSuccess, errors = result.Errors });
+            return BadRequest(result.Result());
         }
 
 

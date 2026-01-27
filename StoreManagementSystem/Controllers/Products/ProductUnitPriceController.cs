@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StoreManagementSystem.DTOs.Products.ProductUnitPrice;
-using StoreManagementSystem.Services.Interfaces.Products;
 using StoreManagementSystem.Services;
+using StoreManagementSystem.Services.Interfaces.Products;
 
 namespace StoreManagementSystem.Controllers.Products
 {
     [ApiController]
 
     [Route("api/[controller]")]
+    [Authorize(Roles = "admin")]
     public class ProductUnitPriceController : ControllerBase
     {
         private readonly IProductUnitPriceService _productUnitPriceService;

@@ -8,6 +8,7 @@ namespace StoreManagementSystem.Controllers.Products
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles ="admin")]
     public class ProductFlavorController : ControllerBase
     {
         private readonly IProductFlavorService _productFlavorService;

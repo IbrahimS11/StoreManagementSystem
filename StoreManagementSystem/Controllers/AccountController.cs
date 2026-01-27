@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StoreManagementSystem.DTOs.Account;
@@ -42,6 +43,7 @@ namespace StoreManagementSystem.Controllers
         }
 
         [HttpPost("register")]
+        [Authorize(Roles ="admin")]
         public async Task<IActionResult> RegisterByAdmin(RegisterByAdminDto model)
         {
            ResultService result= await authService.RegisterAsync(model);

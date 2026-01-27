@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StoreManagementSystem.DTOs.Products.Category;
 using StoreManagementSystem.Services;
 using StoreManagementSystem.Services.Interfaces.Products;
@@ -6,6 +7,7 @@ using StoreManagementSystem.Services.Interfaces.Products;
 namespace StoreManagementSystem.Controllers.Products
 {
     [ApiController]
+    [Authorize(Roles ="admin")]
     [Route("api/[controller]")]
     public class CategoryController : ControllerBase
     {
