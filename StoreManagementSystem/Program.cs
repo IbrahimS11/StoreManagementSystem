@@ -1,28 +1,3 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using StoreManagementSystem.Data;
-using StoreManagementSystem.Filters;
-using StoreManagementSystem.Identity;
-using StoreManagementSystem.Repositories.Implementations.Inventories;
-using StoreManagementSystem.Repositories.Implementations.Products;
-using StoreManagementSystem.Repositories.Implementations.Suppliers;
-using StoreManagementSystem.Repositories.Implementations.UnitOfWork;
-using StoreManagementSystem.Repositories.Interfaces;
-using StoreManagementSystem.Repositories.Interfaces.Inventories;
-using StoreManagementSystem.Repositories.Interfaces.Products;
-using StoreManagementSystem.Repositories.Interfaces.Suppliers;
-using StoreManagementSystem.Repositories.Interfaces.UnitOfWork;
-using StoreManagementSystem.Services.Implementation.Account;
-using StoreManagementSystem.Services.Implementation.Inventories;
-using StoreManagementSystem.Services.Implementation.Products;
-using StoreManagementSystem.Services.Interfaces.Account;
-using StoreManagementSystem.Services.Interfaces.Inventories;
-using StoreManagementSystem.Services.Interfaces.Products;
-using Swashbuckle.AspNetCore;
-using System.Text;
 
 namespace StoreManagementSystem
 {
@@ -32,20 +7,19 @@ namespace StoreManagementSystem
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // ============== CORS ===============
+
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("Customers",
-                    policy =>
-                    {
-                        policy.AllowAnyOrigin()
-                              .AllowAnyMethod()
-                              .AllowAnyHeader();
-                    });
+                options.AddPolicy("Users", policy =>
+                {
+                    policy.WithOrigins("http://localhost:4200") 
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
             });
 
-            // Add services to the container.
-
-            builder.Services.AddControllers();
+            // ================== Controllers & Filters ==================
 
             builder.Services.AddScoped<HandleErrorFilter>();
 
@@ -55,41 +29,59 @@ namespace StoreManagementSystem
             });
 
 
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 
-            //builder.Services.AddOpenApi();
+            // ================ Swagger ==================
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+
+            // ================== AutoMapper ==================
+
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            //register Repositores
+            // ================ Repositories ==================
+
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddScoped<IProductRepository,ProductRepository>();
-            builder.Services.AddScoped<IProductService, ProductService>();
-            builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
-            builder.Services.AddScoped( typeof(ICrudRepository<,>), typeof(CrudRepository<,>) );
-            builder.Services.AddScoped<IAuthService, AuthService>();
-            builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped(typeof(ICrudRepository<,>), typeof(CrudRepository<,>));
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
-            builder.Services.AddScoped<IPurchaseService, PurchaseService>();
             builder.Services.AddScoped<ISupplierPaymentRepository, SupplierPaymentRepository>();
             builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
+
+            // ================== Services ==================
+
+            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<ITokenService, TokenService>();
+
+            builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IProductFlavorService, ProductFlavorService>();
             builder.Services.AddScoped<IProductUnitPriceService, ProductUnitPriceService>();
+            builder.Services.AddScoped<IPurchaseService, PurchaseService>();
 
-            
 
-            builder.Services.AddIdentity<AppIdentityUser, IdentityRole>(option =>
+
+
+
+            // ================== Identity ==================
+
+            builder.Services.AddIdentity<AppIdentityUser, IdentityRole>(options =>
             {
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireDigit = false;
 
-                option.Password.RequireNonAlphanumeric = false;
-                option.Password.RequireUppercase = false;
-                option.Password.RequireLowercase = false;
-                option.Password.RequireDigit = false;
-                option.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 " +
-                                            "«» ÀÃÕŒœ–—“”‘’÷ÿŸ⁄€›ﬁﬂ·„‰ÂÊÌ¡¬√ƒ≈∆»… ";
-            }).AddEntityFrameworkStores<AppDbContext>();
+                options.User.AllowedUserNameCharacters =
+                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 " +
+                    "«» ÀÃÕŒœ–—“”‘’÷ÿŸ⁄€›ﬁﬂ·„‰ÂÊÌ¡¬√ƒ≈∆»… ";
+
+            })
+            .AddEntityFrameworkStores<AppDbContext>();
+
+            // ================== DbContext ==================
 
             builder.Services.AddDbContext<AppDbContext>(options =>
             {
@@ -97,6 +89,7 @@ namespace StoreManagementSystem
             });
 
 
+            // ================== Authentication ==================
 
             builder.Services.AddAuthentication(options =>
             {
@@ -123,7 +116,9 @@ namespace StoreManagementSystem
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            
+            // ================== Middleware ==================
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -135,8 +130,7 @@ namespace StoreManagementSystem
 
             app.UseAuthorization();
 
-            app.UseCors("Customers");
-            app.UseCors("Admin");
+            app.UseCors("Users");
 
             app.MapControllers();
 
